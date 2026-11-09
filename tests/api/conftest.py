@@ -2,6 +2,7 @@
 
 - api: cliente HTTP con la base de datos reiniciada antes de cada prueba.
 - api_ana: lo mismo, con sesión iniciada como Ana García.
+- api_luis: un segundo cliente, con sesión de Luis Pérez (para probar accesos entre usuarios).
 - contrato: el documento OpenAPI publicado por la app (/openapi.json).
 
 Ejecutar:  pytest tests/api
@@ -51,6 +52,13 @@ def api(servidor) -> Api:
 def api_ana(api) -> Api:
     api.login("ana.garcia@example.com", "Password123")
     return api
+
+
+@pytest.fixture
+def api_luis(servidor, api) -> Api:
+    otro = Api(servidor)
+    otro.login("luis.perez@example.com", "Password123")
+    return otro
 
 
 @pytest.fixture(scope="session")
